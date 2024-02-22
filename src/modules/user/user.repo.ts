@@ -1,16 +1,18 @@
 import { Prisma, User } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 
-import { UserRepo } from "modules/user/user.repo";
+import { PrismaService } from "services/prisma/prisma.service";
 
 @Injectable()
-export class UserService {
-  constructor(private userRepo: UserRepo) {}
+export class UserRepo {
+  constructor(private prisma: PrismaService) {}
 
   async findOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
-    return this.userRepo.findOne(userWhereUniqueInput);
+    return this.prisma.user.findUnique({
+      where: userWhereUniqueInput,
+    });
   }
 
   async findAll(params: {
@@ -21,7 +23,7 @@ export class UserService {
     orderBy?: Prisma.UserOrderByWithRelationInput;
   }): Promise<User[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.userRepo.findAll({
+    return this.prisma.user.findMany({
       skip,
       take,
       cursor,
@@ -31,7 +33,9 @@ export class UserService {
   }
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
-    return this.userRepo.create(data);
+    return this.prisma.user.create({
+      data,
+    });
   }
 
   async update(params: {
@@ -39,23 +43,15 @@ export class UserService {
     data: Prisma.UserUpdateInput;
   }): Promise<User> {
     const { where, data } = params;
-    return this.userRepo.update({
+    return this.prisma.user.update({
       data,
       where,
     });
   }
 
   async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.userRepo.delete(where);
-  }
-
-  async checkExistingEmail(email: string): Promise<boolean> {
-    const user = await this.findOne({ email });
-    return !!user;
-  }
-
-  async checkExistingToken(token: string): Promise<boolean> {
-    const user = await this.findOne({ token });
-    return !!user;
+    return this.prisma.user.delete({
+      where,
+    });
   }
 }

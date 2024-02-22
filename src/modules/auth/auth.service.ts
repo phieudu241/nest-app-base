@@ -64,7 +64,7 @@ export class AuthService {
       ...user,
       token,
     };
-    const createdUser = await this.userService.createUser(newUser);
+    const createdUser = await this.userService.create(newUser);
 
     this.mailService.sendEmail(
       user.email,
