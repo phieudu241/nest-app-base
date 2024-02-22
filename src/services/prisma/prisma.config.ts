@@ -1,4 +1,4 @@
-import { PrismaClientOptions } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 
 import { GLOBAL_CONFIG } from "configs/global.config";
 
@@ -12,7 +12,7 @@ export const PRISMA_LOG_CONFIG: Array<LogDefinition> = GLOBAL_CONFIG.prisma.log_
   return { level, emit: "stdout" };
 });
 
-export const PRISMA_CLIENT_OPTIONS: PrismaClientOptions = {
+export const PRISMA_CLIENT_OPTIONS: Prisma.PrismaClientOptions = {
   log: PRISMA_LOG_CONFIG,
 };
 
