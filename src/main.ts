@@ -14,6 +14,7 @@ import { AppModule } from "modules/app/app.module";
 import { Logger } from "services/logger/logger.service";
 import { API_PREFIX } from "shared/constants/global.constants";
 import { isDev } from "shared/helpers/env.helpers";
+import { PrismaModel } from "_prisma-gen/prisma-class";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -51,7 +52,9 @@ async function bootstrap() {
       .addBearerAuth()
       .addSecurityRequirements("bearer")
       .build();
-    const document = SwaggerModule.createDocument(app, options);
+    const document = SwaggerModule.createDocument(app, options, {
+      extraModels: [...PrismaModel.extraModels],
+    });
 
     SwaggerModule.setup(swaggerConfig.path || "api", app, document);
   }

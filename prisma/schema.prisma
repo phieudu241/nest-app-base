@@ -3,6 +3,13 @@ generator client {
   binaryTargets = ["native", "debian-openssl-1.0.x", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl"]
 }
 
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+  clientImportPath = "@prisma/client"
+  dryRun = false
+  output = "../src/_prisma-gen/prisma-class"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

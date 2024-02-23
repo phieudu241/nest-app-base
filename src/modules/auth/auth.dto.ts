@@ -10,6 +10,7 @@ import { EmailField, StringField } from "shared/decorators/dto.decorator";
 export class AuthResponseDTO {
   @ApiProperty()
   user: Partial<User>;
+  @ApiProperty()
   accessToken: string;
 }
 
