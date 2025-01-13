@@ -407,3 +407,6 @@ logs/
 deploy/
 dist.zip
 prisma.zip
+
+# Automatically generated source code
+src/_prisma-gen

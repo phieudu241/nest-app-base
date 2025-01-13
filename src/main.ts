@@ -18,7 +18,7 @@ import { PrismaModel } from "_prisma-gen/prisma-class";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ["error", "error", "warn"],
+    logger: ["error", "warn"],
   });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

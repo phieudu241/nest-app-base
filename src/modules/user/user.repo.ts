@@ -1,5 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
+import { TypedSql } from "@prisma/client/runtime/library";
 
 import { PrismaService } from "services/prisma/prisma.service";
 
@@ -53,5 +54,10 @@ export class UserRepo {
     return this.prisma.user.delete({
       where,
     });
+  }
+
+  async execQueryRawTyped<T>(typedSql: TypedSql<unknown[], T>) {
+    const records = await this.prisma.$queryRawTyped(typedSql);
+    return records;
   }
 }

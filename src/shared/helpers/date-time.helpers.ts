@@ -1,55 +1,74 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
 import { SHORT_DATE } from "shared/constants/global.constants";
 
-export const newDateKeepLocalTime = (date?: Date | string): Date => {
+dayjs.extend(utc);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+
+export const newDateKeepLocalTime = (date?: Date | string): Date | null => {
   if (!date) return null;
-  return moment(date).utc(true).toDate();
+  return dayjs(date).utc(true).toDate();
 };
 
 export function isBeforeDay(date: string | Date, value: string | Date): boolean {
-  return moment(date).isBefore(moment(value), "day");
+  return dayjs(date).isBefore(dayjs(value), "day");
 }
 
 export function isAfterDay(date: string | Date, value: string | Date): boolean {
-  return moment(date).isAfter(moment(value), "day");
+  return dayjs(date).isAfter(dayjs(value), "day");
 }
 
 export function isSameDay(date: string | Date, value: string | Date): boolean {
-  return moment(date).isSame(moment(value), "day");
+  return dayjs(date).isSame(dayjs(value), "day");
 }
 
 export function isSameOrBeforeDay(date: string | Date, value: string | Date): boolean {
-  return moment(date).isSameOrBefore(moment(value), "day");
+  return dayjs(date).isSameOrBefore(dayjs(value), "day");
 }
 
 export function isSameOrAfterDay(date: string | Date, value: string | Date): boolean {
-  return moment(date).isSameOrAfter(moment(value), "day");
+  return dayjs(date).isSameOrAfter(dayjs(value), "day");
 }
 
-export function isSameTime(date, value): boolean {
-  const dateUTC = moment(date).millisecond(0);
-  const valueUTC = moment(value).year(dateUTC.year()).month(dateUTC.month()).date(dateUTC.date()).millisecond(0);
+export function isSameTime(date: string | Date, value: string | Date): boolean {
+  const dateUTC = dayjs(date).millisecond(0);
+  const valueUTC = dayjs(value)
+    .set("year", dateUTC.year())
+    .set("month", dateUTC.month())
+    .set("date", dateUTC.date())
+    .millisecond(0);
   return dateUTC.isSame(valueUTC);
 }
 
-export function isBeforeTime(date, value): boolean {
-  const dateUTC = moment(date).millisecond(0);
-  const valueUTC = moment(value).year(dateUTC.year()).month(dateUTC.month()).date(dateUTC.date()).millisecond(0);
+export function isBeforeTime(date: string | Date, value: string | Date): boolean {
+  const dateUTC = dayjs(date).millisecond(0);
+  const valueUTC = dayjs(value)
+    .set("year", dateUTC.year())
+    .set("month", dateUTC.month())
+    .set("date", dateUTC.date())
+    .millisecond(0);
   return dateUTC.isBefore(valueUTC);
 }
 
-export function isBeforeOrSameTime(date, value): boolean {
+export function isBeforeOrSameTime(date: string | Date, value: string | Date): boolean {
   return isBeforeTime(date, value) || isSameTime(date, value);
 }
 
-export function isAfterTime(date, value): boolean {
-  const dateUTC = moment(date).millisecond(0);
-  const valueUTC = moment(value).year(dateUTC.year()).month(dateUTC.month()).date(dateUTC.date()).millisecond(0);
+export function isAfterTime(date: string | Date, value: string | Date): boolean {
+  const dateUTC = dayjs(date).millisecond(0);
+  const valueUTC = dayjs(value)
+    .set("year", dateUTC.year())
+    .set("month", dateUTC.month())
+    .set("date", dateUTC.date())
+    .millisecond(0);
   return dateUTC.isAfter(valueUTC);
 }
 
-export function isAfterOrSameTime(date, value): boolean {
+export function isAfterOrSameTime(date: string | Date, value: string | Date): boolean {
   return isAfterTime(date, value) || isSameTime(date, value);
 }
 
@@ -60,27 +79,19 @@ export function isAfterOrSameTime(date, value): boolean {
  * @param endDate The end date of the consecutive dates array.
  * @returns An array of consecutive dates starting from `startDate` and ending at `endDate`.
  *
- * * @example
+ * @example
  * const startDate = "2023-07-01";
  * const endDate = "2023-07-03";
  * const results = ["2023-07-01", "2023-07-02", "2023-07-03"];
  */
-export const createDates = (startDate: string | Date, endDate: string | Date) => {
-  const between = moment(endDate).diff(startDate, "days");
+export const createDates = (startDate: string | Date, endDate: string | Date): string[] => {
+  const between = dayjs(endDate).diff(dayjs(startDate), "days") + 1;
 
-  return Array(between)
-    .fill(null)
-    .reduce(
-      (acc) => {
-        const nextDate = moment(acc[acc.length - 1])
-          .add(1, "d")
-          .toISOString();
-        return [...acc, nextDate];
-      },
-      [startDate]
-    );
+  return Array.from({ length: between }, (_, i) =>
+    dayjs(startDate).add(i, "day").toISOString()
+  );
 };
 
-export const formatShortDate = (date: string | Date) => {
-  return moment(date).format(SHORT_DATE);
+export const formatShortDate = (date: string | Date): string => {
+  return dayjs(date).format(SHORT_DATE);
 };

@@ -1,7 +1,9 @@
 import { Prisma, User } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
+import { getUsers } from "@prisma/client/sql";
 
 import { UserRepo } from "modules/user/user.repo";
+import { convertToRawQueryRecordToPrismaModel } from "shared/helpers/sql.helpers";
 
 @Injectable()
 export class UserService {
@@ -57,5 +59,12 @@ export class UserService {
   async checkExistingToken(token: string): Promise<boolean> {
     const user = await this.findOne({ token });
     return !!user;
+  }
+
+  async getUsersByEmail(email: string): Promise<User[]> {
+    const records = await this.userRepo.execQueryRawTyped(getUsers(email));
+    const users = records
+      .map((record) => convertToRawQueryRecordToPrismaModel(record, "User") as User);
+    return users;
   }
 }
