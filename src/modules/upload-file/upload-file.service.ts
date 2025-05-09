@@ -6,7 +6,7 @@ import { checkFileSize, checkImageType } from "shared/helpers/file.helpers";
 
 @Injectable()
 export class UploadFileService {
-  constructor(private s3Service: S3Service) {}
+  constructor(private readonly s3Service: S3Service) {}
 
   async uploadImage(file: Express.Multer.File) {
     checkImageType(file);

@@ -115,7 +115,6 @@ export class Logger implements LoggerService {
     const time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
     switch (level) {
-      default:
       case "info":
         result = `[${color.blue("INFO")}] ${color.dim.yellow.bold.underline(time)} [${color.green(
           this.context
@@ -131,6 +130,7 @@ export class Logger implements LoggerService {
           this.context
         )}] ${message}`;
         break;
+      default:
     }
     console.log(result); // TODO: DON'T remove this console.log
 

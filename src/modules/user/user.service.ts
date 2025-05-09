@@ -7,7 +7,7 @@ import { convertToRawQueryRecordToPrismaModel } from "shared/helpers/sql.helpers
 
 @Injectable()
 export class UserService {
-  constructor(private userRepo: UserRepo) {}
+  constructor(private readonly userRepo: UserRepo) {}
 
   async findOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,

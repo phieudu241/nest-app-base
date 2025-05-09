@@ -53,7 +53,7 @@ export class MailService {
           text: html,
           html: html,
         };
-        this.transporter.sendMail(mailOptions, (error, info) => {
+        this.transporter.sendMail(mailOptions, (error: Error, info) => {
           if (error) {
             reject(error);
           } else {

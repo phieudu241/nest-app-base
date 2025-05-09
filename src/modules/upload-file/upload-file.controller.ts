@@ -10,7 +10,7 @@ import { Role } from "shared/constants/global.constants";
 @ApiTags("Upload file")
 @Controller("/upload")
 export class UploadFileController {
-  constructor(private uploadFileService: UploadFileService) {}
+  constructor(private readonly uploadFileService: UploadFileService) {}
 
   @Post("/image")
   @ApiConsumes("multipart/form-data")

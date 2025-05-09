@@ -5,7 +5,7 @@ import { AppError } from "shared/types/entity.type";
 
 @Injectable()
 export class ErrorReportService {
-  constructor(private logger: Logger) {
+  constructor(private readonly logger: Logger) {
   }
 
   async report(error: AppError): Promise<void> {

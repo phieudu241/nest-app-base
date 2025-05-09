@@ -1,7 +1,7 @@
 import { BadRequestException } from "@nestjs/common";
 
 export class InvalidFormException extends BadRequestException {
-  constructor(private errors: { [key: string]: string }, message: string) {
+  constructor(private readonly errors: { [key: string]: string }, message: string) {
     super(message);
   }
 

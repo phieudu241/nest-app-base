@@ -6,7 +6,7 @@ const hash = (password: string) => {
   return new Promise((resolve, reject) => {
     const salt = randomBytes(8).toString("hex");
 
-    scrypt(password, salt, 64, (err, derivedKey) => {
+    scrypt(password, salt, 64, (err: Error, derivedKey) => {
       if (err) reject(err);
       resolve(salt + ":" + derivedKey.toString("hex"));
     });
@@ -16,7 +16,7 @@ const hash = (password: string) => {
 const verify = (password: string, hash: string) => {
   return new Promise((resolve, reject) => {
     const [salt, key] = hash.split(":");
-    scrypt(password, salt, 64, (err, derivedKey) => {
+    scrypt(password, salt, 64, (err: Error, derivedKey) => {
       if (err) reject(err);
       resolve(key == derivedKey.toString("hex"));
     });

@@ -14,7 +14,7 @@ import { Role } from "shared/constants/global.constants";
 export class JwtAuthGuard extends AuthGuard("jwt") {
   roles: string[];
 
-  constructor(private reflector: Reflector) {
+  constructor(private readonly reflector: Reflector) {
     super(reflector);
   }
 

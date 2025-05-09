@@ -8,7 +8,7 @@ import { PrismaListener } from "services/prisma/prisma.listener";
 
 @Injectable()
 export class PrismaService extends PrismaClient<Prisma.PrismaClientOptions, "error" | "query"> implements OnModuleInit, OnModuleDestroy {
-  constructor(private logger: Logger) {
+  constructor(private readonly logger: Logger) {
     super({ ...PRISMA_CLIENT_OPTIONS });
   }
 

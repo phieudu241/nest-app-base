@@ -14,9 +14,9 @@ import { AuthResponseDTO, ForgotPasswordDTO, LoginDTO, RegisterUserDTO, ResetPas
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
-    private mailService: MailService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {
   }
 

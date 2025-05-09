@@ -9,7 +9,7 @@ import { AppError } from "shared/types/entity.type";
 @ApiTags("error-report")
 @Controller("/error-report")
 export class ErrorReportController {
-  constructor(private reportService: ErrorReportService) {
+  constructor(private readonly reportService: ErrorReportService) {
   }
 
   @Post("")
