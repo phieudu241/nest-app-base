@@ -2,6 +2,8 @@ import * as chalk from "chalk";
 import { createLogger, LoggerOptions } from "winston";
 import { Injectable, LoggerService } from "@nestjs/common";
 import DailyRotateFile from "winston-daily-rotate-file";
+import WinstonCloudWatch from "winston-cloudwatch";
+import TransportStream from "winston-transport";
 
 import { GLOBAL_CONFIG } from "configs/global.config";
 
@@ -28,11 +30,29 @@ export class Logger implements LoggerService {
   }
 
   public getLoggerOptions(level: string): LoggerOptions {
+    const transports: TransportStream[] = [
+      dailyRotateFile
+    ];
+
+    if (GLOBAL_CONFIG.aws.cloudwatch_logger_enable) {
+      transports.push(new WinstonCloudWatch({
+        level: this.level,
+        logGroupName: GLOBAL_CONFIG.aws.cloudwatch_log_group,
+        logStreamName: "logger",
+        awsAccessKeyId: GLOBAL_CONFIG.aws.aws_access_key_id,
+        awsSecretKey: GLOBAL_CONFIG.aws.aws_secret_access_key,
+        awsRegion: GLOBAL_CONFIG.aws.region,
+        messageFormatter: function(logObject) {
+          const formattedDate = logObject.timestamp;
+          const message = `[${formattedDate}][${logObject.context}][${logObject.level}]${JSON.stringify(logObject.message)}`;
+          return message;
+        }
+      }));
+    }
+
     return {
       level: level,
-      transports: [
-        dailyRotateFile,
-      ],
+      transports: transports,
     };
   }
 

@@ -49,5 +49,7 @@ export const GLOBAL_CONFIG = {
       bucket: process.env.AWS_S3_BUCKET,
     },
     region: process.env.AWS_REGION,
+    cloudwatch_logger_enable: process.env.AWS_CLOUDWATCH_LOGGER_ENABLE === "true",
+    cloudwatch_log_group: process.env.AWS_CLOUDWATCH_LOG_GROUP,
   },
 };
